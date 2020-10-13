@@ -5,9 +5,18 @@ public class DevicesModel {
     String status;
     String name;
     String type;
+    String device_type;
     String brightness;
     String schedual_string;
     String document_id;
+
+    public String getDevice_type() {
+        return device_type;
+    }
+
+    public void setDevice_type(String device_type) {
+        this.device_type = device_type;
+    }
 
     public String getDocument_id() {
         return document_id;

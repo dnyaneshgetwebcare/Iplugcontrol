@@ -80,7 +80,8 @@ public class ProfileFragment extends Fragment {
 
         //tvName.setText(user.getDisplayName());
         tvEmail.setText(user.getEmail());
-         db = FirebaseFirestore.getInstance();
+       tvPhone.setText(user.getPhoneNumber());
+         //db = FirebaseFirestore.getInstance();
        // FirebaseUser user = mAuth.getCurrentUser();
       //  Log.d(TAG, "User Signed In " + user.getEmail());
        // Toast.makeText(getContext(), "User Signed In " + user.getEmail(), Toast.LENGTH_SHORT).show();

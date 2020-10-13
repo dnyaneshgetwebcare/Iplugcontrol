@@ -27,8 +27,10 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -85,39 +87,56 @@ OtherDeviceAdapter otherDeviceAdapter;
                                         criticalDevices = new CriticalDevices();
                                     }
                                     //myRef.getKey()
-                                    if (entry.getKey().equalsIgnoreCase("roomtype")) {
+                                    if (entry.getKey().equalsIgnoreCase("roomHint")) {
                                         // devicesModel.setName(entry.getKey());
                                         if (criticalDevices != null) {
                                             criticalDevices.setType(entry.getValue().toString());
 
                                         }
-                                    } else if(!entry.getKey().equalsIgnoreCase("schedule")){
+                                    } else if(entry.getKey().equalsIgnoreCase("type")) {
+                                        criticalDevices.setName(getName( entry.getValue().toString()));
+                                } else if(entry.getKey().equalsIgnoreCase("otherDeviceIds")) {
                                         // criticalDevices = new CriticalDevices();
-                                        criticalDevices.setName(entry.getKey());
-                                        criticalDevices.setId(entry.getValue().toString());
+
+                                        ArrayList<HashMap<String, Object>> device_id_map = (ArrayList<HashMap<String, Object>>) entry.getValue();
+                                        // HashMap<String,Object> device_id_map= temp.get(0);
+                                        //device_id_map.get(0);
+                                        for (Map.Entry<String, Object> entry_dev : device_id_map.get(0).entrySet()) {
+                                            criticalDevices.setId(entry_dev.getValue().toString());
+                                        }
+                                    }else if(entry.getKey().equalsIgnoreCase("nicknames")) {
+
+                                            ArrayList<String> device_id_map= (ArrayList<String>) entry.getValue();
+
+                                            //criticalDevices.setName(device_id_map.get(0).toString());
 
                                         otherDevices = new OtherDevices();
-                                        otherDevices.setRoomtype(entry.getKey().toString());
+                                        otherDevices.setRoomtype(device_id_map.get(0).toString());
                                         otherDevices.setOffDevices(1);
                                         otherDevices.setOnDevices(1);
                                        /* if (!otherDevicesList.contains(otherDevices)) {
 
                                             otherDevicesList.add(otherDevices);
                                         }else{*/
-                                       boolean new_device=true;
-                                            for (OtherDevices p : otherDevicesList) {
-                                                if (p.getRoomtype().equals(entry.getKey().toString())) {
-                                                    p.setOnDevices(p.getOnDevices()+1);
-                                                    new_device=false;
-                                                    break;
-                                                }
+                                        boolean new_device=true;
+                                        for (OtherDevices p : otherDevicesList) {
+                                            if (p.getRoomtype().equals(device_id_map.get(0).toString())) {
+                                                p.setOnDevices(p.getOnDevices()+1);
+                                                new_device=false;
+                                                break;
                                             }
-                                            if(new_device){
-                                                otherDevicesList.add(otherDevices);
-                                            }
+                                        }
+                                        if(new_device){
+                                            otherDevicesList.add(otherDevices);
+                                        }
+                                    }
+
+                                        //criticalDevices.setId(entry.getValue().toString());
+
+
                                         //}
 
-                                    }
+
 
                                 }
                                 if (criticalDevices != null) {
@@ -152,6 +171,10 @@ OtherDeviceAdapter otherDeviceAdapter;
                     }
                 });
         return root;
+    }
+    public String getName(String string){
+        String[] parts = string.split(Pattern.quote("."));
+        return parts[3];
     }
    /* @RequiresApi(api = Build.VERSION_CODES.N)
     public boolean containsName(final List<OtherDevices> list, final String name){

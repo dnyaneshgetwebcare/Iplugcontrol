@@ -5,9 +5,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
-public  class CommanMethods {
+public class CommanMethods {
 
-    public  boolean checkInternet(Context context){
+    public    boolean checkInternet(Context context){
         boolean connected = false;
         try {
             ConnectivityManager cm = (ConnectivityManager)context.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -19,4 +19,5 @@ public  class CommanMethods {
         }
         return connected;
     }
+
 }

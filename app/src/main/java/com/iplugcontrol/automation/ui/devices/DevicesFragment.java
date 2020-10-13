@@ -35,8 +35,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -132,10 +134,15 @@ public class DevicesFragment extends Fragment implements ExpandableRoomSection.C
                                                 roomsModels.add(roomM);
                                             }
                                         }
-                                    }else if(entry.getKey().equalsIgnoreCase("schedule")) {
+                                    }else if(entry.getKey().equalsIgnoreCase("otherDeviceIds")) {
                                         // devicesModel.setName(entry.getKey());
                                         if(devicesModel!=null) {
-                                            devicesModel.setSchedual_string(entry.getValue().toString());
+                                            ArrayList<HashMap <String,Object>> device_id_map= (ArrayList<HashMap<String, Object>>) entry.getValue();
+                                           // HashMap<String,Object> device_id_map= temp.get(0);
+                                            //device_id_map.get(0);
+                                            for (Map.Entry<String, Object> entry_dev : device_id_map.get(0).entrySet()) {
+                                                devicesModel.setId(entry_dev.getValue().toString());
+                                            }
                                             //roomM=new RoomsModel();
                                             //roomM.setRoomName(entry.getValue().toString());
                                             /*if(!roomsModels.contains(entry.getValue().toString())){
@@ -144,11 +151,32 @@ public class DevicesFragment extends Fragment implements ExpandableRoomSection.C
                                                 roomsModels.add(roomM);
                                             }*/
                                         }
-                                    }else{
+                                    }else if(entry.getKey().equalsIgnoreCase("nicknames")) {
+                                        // devicesModel.setName(entry.getKey());
+                                        if(devicesModel!=null) {
+                                            ArrayList<String> device_id_map= (ArrayList<String>) entry.getValue();
+                                            // HashMap<String,Object> device_id_map= temp.get(0);
+                                            //device_id_map.get(0);
+                                            //for (Map.Entry<String, Object> entry_dev : device_id_map.get(0).entrySet()) {
+                                                devicesModel.setName(device_id_map.get(0).toString());
+                                            //}
+                                            //roomM=new RoomsModel();
+                                            //roomM.setRoomName(entry.getValue().toString());
+                                            /*if(!roomsModels.contains(entry.getValue().toString())){
+                                                roomM.setOff_count(0);
+                                               // roomM.setOff_count(0);
+                                                roomsModels.add(roomM);
+                                            }*/
+                                        }
+                                    }if(entry.getKey().equalsIgnoreCase("type")) {
+                                        devicesModel.setDevice_type(getName( entry.getValue().toString()));
+                                        }
+
+                                    /*else{
                                         // devicesModel = new DevicesModel();
                                         devicesModel.setName(entry.getKey());
                                         devicesModel.setId(entry.getValue().toString());
-                                    }
+                                    }*/
                                     }catch (Exception ex){
                                         Toast.makeText(getContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
                                     }
@@ -252,7 +280,10 @@ public class DevicesFragment extends Fragment implements ExpandableRoomSection.C
 //            sectionAdapter.notifyAllItemsInserted();
 //        }
     }
-
+    public String getName(String string){
+        String[] parts = string.split(Pattern.quote("."));
+        return parts[3];
+    }
     @Override
     public void onItemRootViewClicked(@NonNull String sectionTitle, int itemAdapterPosition) {
 

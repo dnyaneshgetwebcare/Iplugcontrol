@@ -72,9 +72,9 @@ final class ExpandableRoomSection extends Section {
         final DevicesModel myListData = deviceList.get(position);
         itemHolder.rl_container.setVisibility(View.GONE);
         itemHolder.progressBar.setVisibility(View.VISIBLE);
-        itemHolder.device_name.setText(getname(deviceList.get(position).getName()) );
+        itemHolder.device_name.setText(deviceList.get(position).getName());
         itemHolder.room_type.setText(deviceList.get(position).getType());
-        itemHolder.device_img.setImageResource(getDeviceType(deviceList.get(position).getName(),deviceList.get(position).getStatus()));
+        itemHolder.device_img.setImageResource(getDeviceType(deviceList.get(position).getDevice_type(),deviceList.get(position).getStatus()));
         itemHolder.device_status.setImageResource(getDrawable(deviceList.get(position).getStatus()));
         //  holder.change_status.setText(deviceList.get(position).getStatus());
         itemHolder.ll_brightness.setVisibility(View.GONE);
@@ -239,7 +239,7 @@ final class ExpandableRoomSection extends Section {
         try {
             DatabaseReference myRef = database.getReference().getRoot().child(device_id).child("OnOff").child("on");
             boolean bool = Boolean.parseBoolean(status_val);
-            myRef.setValue((!bool) + "");
+            myRef.setValue((!bool));
         }catch (Exception ex){
             Log.w("Status",ex.getMessage());
         }
@@ -254,6 +254,10 @@ final class ExpandableRoomSection extends Section {
         }
     }
     public int getDeviceType(String type,String status){
+        /*if(type.toLowerCase().contains("light") ||type.toLowerCase().contains("lamp")  ){
+            type="light";
+        }*/
+        type=type.toLowerCase();
         if(status!=null) {
             switch (type) {
                 case "light":
