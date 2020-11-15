@@ -5,13 +5,58 @@ public class DevicesModel {
     String status;
     String name;
     String type;
+    String fan_speed;
     String device_type;
     String brightness;
     String schedual_string;
     String document_id;
+    boolean brightness_flag;
+    boolean on_off_flag;
+    boolean open_close_flag;
+    boolean fan_flag;
 
     public String getDevice_type() {
         return device_type;
+    }
+
+    public boolean isOn_off_flag() {
+        return on_off_flag;
+    }
+
+    public String getFan_speed() {
+        return fan_speed;
+    }
+
+    public void setFan_speed(String fan_speed) {
+        this.fan_speed = fan_speed;
+    }
+
+    public void setOn_off_flag(boolean on_off_flag) {
+        this.on_off_flag = on_off_flag;
+    }
+
+    public boolean isOpen_close_flag() {
+        return open_close_flag;
+    }
+
+    public void setOpen_close_flag(boolean open_close_flag) {
+        this.open_close_flag = open_close_flag;
+    }
+
+    public boolean isFan_flag() {
+        return fan_flag;
+    }
+
+    public void setFan_flag(boolean fan_flag) {
+        this.fan_flag = fan_flag;
+    }
+
+    public boolean isBrightness_flag() {
+        return brightness_flag;
+    }
+
+    public void setBrightness_flag(boolean brightness_flag) {
+        this.brightness_flag = brightness_flag;
     }
 
     public void setDevice_type(String device_type) {

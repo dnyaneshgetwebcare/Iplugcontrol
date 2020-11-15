@@ -170,7 +170,52 @@ public class DevicesFragment extends Fragment implements ExpandableRoomSection.C
                                         }
                                     }if(entry.getKey().equalsIgnoreCase("type")) {
                                         devicesModel.setDevice_type(getName( entry.getValue().toString()));
-                                        }
+                                        }if(entry.getKey().equalsIgnoreCase("traits")) {
+
+                                            ArrayList<String> traits_array= (ArrayList<String>) entry.getValue();
+                                            for (String traits_string : traits_array) {
+                                            String traits_val=getName(traits_string);
+                                            if(traits_val.equalsIgnoreCase("OnOff")){
+                                                devicesModel.setOn_off_flag(true);
+                                            }
+
+                                                if(traits_val.equalsIgnoreCase("FanSpeed")){
+                                                    devicesModel.setFan_flag(true);
+                                                }
+                                                if(traits_val.equalsIgnoreCase("Brightness")){
+                                                    devicesModel.setBrightness_flag(true);
+                                                }
+                                                if(traits_val.equalsIgnoreCase("OpenClose")){
+                                                    devicesModel.setOpen_close_flag(true);
+                                                }
+
+
+
+                                         /*       switch (traits_val){
+                                                case "OnOff":
+                                                {
+                                                    devicesModel.setOn_off_flag(true);
+                                                }
+                                                case "FanSpeed":
+                                                {
+                                                    devicesModel.setFan_flag(true);
+                                                }
+                                                case "Brightness":
+                                                {
+                                                    devicesModel.setBrightness_flag(true);
+                                                }
+                                                case "OpenClose":
+                                                {
+                                                    devicesModel.setOpen_close_flag(true);
+                                                }
+                                               *//* case "OnOff":
+                                                {
+
+                                                }*//*
+
+                                            }*/
+                                            }
+                                    }
 
                                     /*else{
                                         // devicesModel = new DevicesModel();

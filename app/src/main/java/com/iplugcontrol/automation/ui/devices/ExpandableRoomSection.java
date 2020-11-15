@@ -81,15 +81,20 @@ final class ExpandableRoomSection extends Section {
         if (deviceList.get(position).getBrightness() == null || deviceList.get(position).getBrightness() == "") {
             deviceList.get(position).setBrightness("0");
         }
-        if (deviceList.get(position).getName().equalsIgnoreCase("fan") || deviceList.get(position).getName().equalsIgnoreCase("Dlight")) {
+        if (deviceList.get(position).getFan_speed() == null || deviceList.get(position).getFan_speed() == "") {
+            deviceList.get(position).setFan_speed("0");
+        }
+
+        if (deviceList.get(position).isFan_flag()) {
             itemHolder.ll_brightness.setVisibility(View.VISIBLE);
-            itemHolder.brightness_percent.setText(deviceList.get(position).getBrightness());
-            itemHolder.sb_brightness.setProgress(Integer.parseInt(deviceList.get(position).getBrightness()));
+            itemHolder.sb_brightness.setMax(5);
+            itemHolder.brightness_percent.setText(deviceList.get(position).getFan_speed());
+            itemHolder.sb_brightness.setProgress(Integer.parseInt(deviceList.get(position).getFan_speed()));
             itemHolder.sb_brightness.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                     try {
-                        changeBrightness(deviceList.get(position).getId(), progress);
+                        changeBrightness(deviceList.get(position).getId(), progress,"currentFanSpeedSetting");
                     } catch (Exception ex) {
                         Log.w("Status", ex.getMessage());
             }
@@ -107,7 +112,32 @@ final class ExpandableRoomSection extends Section {
     });
 }
 
+        if (deviceList.get(position).isBrightness_flag()) {
+            itemHolder.ll_brightness.setVisibility(View.VISIBLE);
+            itemHolder.sb_brightness.setMax(100);
+            itemHolder.brightness_percent.setText(deviceList.get(position).getBrightness());
+            itemHolder.sb_brightness.setProgress(Integer.parseInt(deviceList.get(position).getBrightness()));
+            itemHolder.sb_brightness.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    try {
+                        changeBrightness(deviceList.get(position).getId(), progress,"Brightness");
+                    } catch (Exception ex) {
+                        Log.w("Status", ex.getMessage());
+                    }
+                }
 
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+
+                }
+            });
+        }
         if(deviceList.get(position).getStatus()==null || deviceList.get(position).getStatus().equalsIgnoreCase("")){
             getRealtimeListner(deviceList.get(position).getId(),position,itemHolder.getAdapterPosition());
             //clickListener.onStateChanged(deviceList.get(position).getId(),position,itemHolder.getAdapterPosition());
@@ -160,9 +190,14 @@ final class ExpandableRoomSection extends Section {
                                 Log.d(TAG, entry.getKey() + " => " + entry.getValue());
                                 deviceList.get(position).setStatus(entry.getValue().toString());
                             }
-                        }else if(ds.getKey().equalsIgnoreCase("Brightness")){
+                        }
+                        if(ds.getKey().equalsIgnoreCase("Brightness")){
 
                             deviceList.get(position).setBrightness(ds.getValue().toString());
+                        }
+                        if(ds.getKey().equalsIgnoreCase("currentFanSpeedSetting")){
+
+                            deviceList.get(position).setFan_speed(ds.getValue().toString());
                         }
                     }
                     clickListener.onStateChanged(adapterpos);
@@ -244,9 +279,10 @@ final class ExpandableRoomSection extends Section {
             Log.w("Status",ex.getMessage());
         }
     }
-    public void changeBrightness(String device_id,int brightness){
+    public void changeBrightness(String device_id,int brightness,String set_value){
+        //set_value="Brightness";
         try {
-            DatabaseReference myRef = database.getReference().getRoot().child(device_id).child("Brightness");
+            DatabaseReference myRef = database.getReference().getRoot().child(device_id).child(set_value);
 
             myRef.setValue(brightness);
         }catch (Exception ex){
