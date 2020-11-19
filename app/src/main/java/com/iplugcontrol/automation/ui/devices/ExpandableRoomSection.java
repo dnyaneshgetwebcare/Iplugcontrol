@@ -94,7 +94,7 @@ final class ExpandableRoomSection extends Section {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                     try {
-                        changeBrightness(deviceList.get(position).getId(), progress+"","currentFanSpeedSetting");
+                        changeBrightness(deviceList.get(position).getId(), progress,"currentFanSpeedSetting");
                     } catch (Exception ex) {
                         Log.w("Status", ex.getMessage());
             }
@@ -281,10 +281,15 @@ final class ExpandableRoomSection extends Section {
     }
     public void changeBrightness(String device_id,int brightness,String set_value){
         //set_value="Brightness";
+
         try {
             DatabaseReference myRef = database.getReference().getRoot().child(device_id).child(set_value);
+            if(set_value.equalsIgnoreCase("currentFanSpeedSetting")){
+                myRef.setValue(brightness+"");
+            }else{
+                myRef.setValue(brightness);
+            }
 
-            myRef.setValue(brightness);
         }catch (Exception ex){
             Log.w("Status",ex.getMessage());
         }
