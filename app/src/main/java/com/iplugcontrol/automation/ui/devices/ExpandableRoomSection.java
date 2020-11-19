@@ -94,7 +94,7 @@ final class ExpandableRoomSection extends Section {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                     try {
-                        changeBrightness(deviceList.get(position).getId(), progress,"currentFanSpeedSetting");
+                        changeBrightness(deviceList.get(position).getId(), progress+"","currentFanSpeedSetting");
                     } catch (Exception ex) {
                         Log.w("Status", ex.getMessage());
             }
